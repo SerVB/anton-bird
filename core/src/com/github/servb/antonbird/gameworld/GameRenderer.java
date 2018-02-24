@@ -129,6 +129,10 @@ public final class GameRenderer {
                     1, 1, bird.getRotation());
         }
 
+        final String score = String.valueOf(myWorld.getScore());
+        AssetLoader.shadow.draw(batcher, score, (136 / 2) - (3 * score.length()), 12);
+        AssetLoader.font.draw(batcher, score, (136 / 2) - (3 * score.length() - 1), 11);
+
         batcher.end();
 
         /*shapeRenderer.begin(ShapeType.Filled);

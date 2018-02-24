@@ -15,6 +15,9 @@
  */
 package com.github.servb.antonbird.gameobject;
 
+import com.github.servb.antonbird.gameworld.GameWorld;
+import com.github.servb.antonbird.helper.AssetLoader;
+
 /**
  *
  * @author SerVB
@@ -24,10 +27,14 @@ public final class ScrollHandler {
     private final Grass frontGrass, backGrass;
     private final Pipe pipe1, pipe2, pipe3;
 
+    private final GameWorld gameWorld;
+
     public static final int SCROLL_SPEED = -59;
     public static final int PIPE_GAP = 49;
 
-    public ScrollHandler(final float yPos) {
+    public ScrollHandler(final GameWorld gameWorld, final float yPos) {
+        this.gameWorld = gameWorld;
+
         frontGrass = new Grass(0, yPos, 143, 11, SCROLL_SPEED);
         backGrass = new Grass(frontGrass.getTailX(), yPos, 143, 11, SCROLL_SPEED);
 
@@ -67,7 +74,26 @@ public final class ScrollHandler {
     }
 
     public boolean collides(final Anton bird) {
-       return pipe1.collides(bird) || pipe2.collides(bird) || pipe3.collides(bird);
+        if (!pipe1.isScored()
+                && pipe1.getX() + (pipe1.getWidth() / 2) < bird.getX() + bird.getWidth()) {
+            addScore(1);
+            pipe1.setScored(true);
+            AssetLoader.coin.play();
+        } else if (!pipe2.isScored()
+                && pipe2.getX() + (pipe2.getWidth() / 2) < bird.getX() + bird.getWidth()) {
+            addScore(1);
+            pipe2.setScored(true);
+            AssetLoader.coin.play();
+
+        } else if (!pipe3.isScored()
+                && pipe3.getX() + (pipe3.getWidth() / 2) < bird.getX() + bird.getWidth()) {
+            addScore(1);
+            pipe3.setScored(true);
+            AssetLoader.coin.play();
+
+        }
+
+        return pipe1.collides(bird) || pipe2.collides(bird) || pipe3.collides(bird);
     }
 
     public final Grass getFrontGrass() {
@@ -88,5 +114,9 @@ public final class ScrollHandler {
 
     public final Pipe getPipe3() {
         return pipe3;
+    }
+
+    private void addScore(final int increment) {
+        gameWorld.addScore(increment);
     }
 }

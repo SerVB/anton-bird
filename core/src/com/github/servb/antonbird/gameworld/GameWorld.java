@@ -15,6 +15,8 @@
  */
 package com.github.servb.antonbird.gameworld;
 
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.github.servb.antonbird.gameobject.Anton;
 import com.github.servb.antonbird.gameobject.ScrollHandler;
 import com.github.servb.antonbird.helper.AssetLoader;
@@ -29,21 +31,34 @@ public final class GameWorld {
     private final Anton bird;
     private final ScrollHandler scroller;
 
-    private boolean isAlive = true;
+    private final Rectangle ground;
+
+    private int score = 0;
 
     public GameWorld(final int midPointY) {
         bird = new Anton(33, midPointY - 5, 17, 12);
-        scroller = new ScrollHandler(midPointY + 66);
+        scroller = new ScrollHandler(this, midPointY + 66);
+        ground = new Rectangle(0, midPointY + 66, 136, 11);
     }
 
-    public final void update(final float delta) {
+    public final void update(float delta) {
+        if (delta > .15f) {
+            delta = .15f;
+        }
+
         bird.update(delta);
         scroller.update(delta);
 
-        if (isAlive && scroller.collides(bird)) {
+        if (scroller.collides(bird) && bird.isAlive()) {
             scroller.stop();
+            bird.die();
             AssetLoader.dead[new Random().nextInt(AssetLoader.DIE_SOUND_COUNT)].play();
-            isAlive = false;
+        }
+
+        if (Intersector.overlaps(bird.getBoundingCircle(), ground)) {
+            scroller.stop();
+            bird.die();
+            bird.decelerate();
         }
     }
 
@@ -53,5 +68,13 @@ public final class GameWorld {
 
     public final ScrollHandler getScroller() {
         return scroller;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void addScore(final int increment) {
+        score += increment;
     }
 }

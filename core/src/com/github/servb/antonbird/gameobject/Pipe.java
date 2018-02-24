@@ -35,6 +35,8 @@ public final class Pipe extends Scrollable {
 
     private float groundY;
 
+    private boolean isScored = false;
+
     public Pipe(final float x, final float y, final int width, final int height,
             final float scrollSpeed, final float groundY) {
         super(x, y, width, height, scrollSpeed);
@@ -51,6 +53,7 @@ public final class Pipe extends Scrollable {
     public void reset(float newX) {
         super.reset(newX);
         height = r.nextInt(90) + 15;
+        isScored = false;
     }
 
     @Override
@@ -92,5 +95,13 @@ public final class Pipe extends Scrollable {
 
     public Rectangle getBarDown() {
         return barDown;
+    }
+
+    public boolean isScored() {
+        return isScored;
+    }
+
+    public void setScored(final boolean state) {
+        isScored = state;
     }
 }

@@ -17,6 +17,7 @@ package com.github.servb.antonbird.gameobject;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.github.servb.antonbird.helper.AssetLoader;
 
 /**
  *
@@ -34,6 +35,8 @@ public final class Anton {
 
     private Circle boundingCircle;
 
+    private boolean isAlive;
+
     public Anton(final float x, final float y, final int width, final int height) {
         this.width = width;
         this.height = height;
@@ -43,6 +46,8 @@ public final class Anton {
         acceleration = new Vector2(0, 460);
 
         boundingCircle = new Circle();
+
+        isAlive = true;
     }
 
     public final boolean isFalling() {
@@ -50,7 +55,7 @@ public final class Anton {
     }
 
     public final boolean shouldntFlap() {
-        return velocity.y > 70;
+        return velocity.y > 70 || !isAlive;
     }
 
     public final void update(final float delta) {
@@ -71,7 +76,7 @@ public final class Anton {
             }
         }
 
-        if (isFalling()) {
+        if (isFalling() || !isAlive) {
             rotation += 480 * delta;
 
             if (rotation > 80) {
@@ -81,7 +86,10 @@ public final class Anton {
     }
 
     public final void onClick() {
-        velocity.y = -140;
+        if (isAlive) {
+            AssetLoader.flap.play();
+            velocity.y = -140;
+        }
     }
 
     public final float getX() {
@@ -106,5 +114,18 @@ public final class Anton {
 
     public Circle getBoundingCircle() {
         return boundingCircle;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void die() {
+        isAlive = false;
+        velocity.y = 0;
+    }
+
+    public void decelerate() {
+        acceleration.y = 0;
     }
 }
