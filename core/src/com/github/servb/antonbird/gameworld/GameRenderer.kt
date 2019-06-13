@@ -80,8 +80,8 @@ class GameRenderer(private val world: GameWorld, private val gameHeight: Int, pr
         shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1f)
         shapeRenderer.rect(0f, 0f, 136f, (midPointY + 66).toFloat())
 
-        shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1f)
-        shapeRenderer.rect(0f, (midPointY + 66).toFloat(), 136f, 11f)
+//        shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1f)
+//        shapeRenderer.rect(0f, (midPointY + 66).toFloat(), 136f, 11f)
 
         shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1f)
         shapeRenderer.rect(0f, (midPointY + 77).toFloat(), 136f, 52f)
