@@ -14,7 +14,7 @@ import com.github.servb.antonbird.gameobject.Pipe
 import com.github.servb.antonbird.gameobject.ScrollHandler
 import com.github.servb.antonbird.helper.AssetLoader
 
-class GameRenderer(private val myWorld: GameWorld, private val gameHeight: Int, private val midPointY: Int) {
+class GameRenderer(private val world: GameWorld, private val gameHeight: Int, private val midPointY: Int) {
     // Game Objects
     private val bird: Anton
     private val scroller: ScrollHandler
@@ -52,8 +52,8 @@ class GameRenderer(private val myWorld: GameWorld, private val gameHeight: Int, 
             projectionMatrix = cam.combined
         }
 
-        bird = myWorld.bird
-        scroller = myWorld.scroller
+        bird = world.bird
+        scroller = world.scroller
         frontGrass = scroller.grass1
         backGrass = scroller.grass2
         pipe1 = scroller.pipe1
@@ -111,45 +111,39 @@ class GameRenderer(private val myWorld: GameWorld, private val gameHeight: Int, 
                     1f, 1f, bird.rotation)
         }
 
-        val score = myWorld.score.toString()
-        AssetLoader.shadow.draw(batcher, score, (136 / 2 - 3 * score.length).toFloat(), 12f)
-        AssetLoader.font.draw(batcher, score, (136 / 2 - (3 * score.length - 1)).toFloat(), 11f)
+        if (world.isReady) {
+            AssetLoader.shadow.draw(batcher, "Touch me", (136 / 2) - 42f, 76f)
+            AssetLoader.font.draw(batcher, "Touch me", (136 / 2) - (42f - 1f), 75f)
+        } else {
+            if (world.isGameOver || world.isHighScore) {
+                if (world.isGameOver) {
+                    AssetLoader.shadow.draw(batcher, "Game Over", 25f, 56f)
+                    AssetLoader.font.draw(batcher, "Game Over", 24f, 55f)
+
+                    AssetLoader.shadow.draw(batcher, "High Score:", 23f, 106f)
+                    AssetLoader.font.draw(batcher, "High Score:", 22f, 105f)
+
+                    val highScore = AssetLoader.highScore.toString()
+
+                    // Draw shadow first
+                    AssetLoader.shadow.draw(batcher, highScore, 136 / 2 - 3f * highScore.length, 128f)
+                    // Draw text
+                    AssetLoader.font.draw(batcher, highScore, 136 / 2 - (3f * highScore.length - 1), 127f)
+                } else {
+                    AssetLoader.shadow.draw(batcher, "High Score!", 19f, 56f)
+                    AssetLoader.font.draw(batcher, "High Score!", 18f, 55f)
+                }
+
+                AssetLoader.shadow.draw(batcher, "Try again?", 23f, 76f)
+                AssetLoader.font.draw(batcher, "Try again?", 24f, 75f)
+            }
+
+            val score = world.score.toString()
+            AssetLoader.shadow.draw(batcher, score, (136 / 2 - 3 * score.length).toFloat(), 12f)
+            AssetLoader.font.draw(batcher, score, (136 / 2 - (3 * score.length - 1)).toFloat(), 11f)
+        }
 
         batcher.end()
-
-        /*shapeRenderer.begin(ShapeType.Filled);
-        shapeRenderer.setColor(1f, 0f, 0f, 0.5f);
-        shapeRenderer.circle(bird.getBoundingCircle().x, bird.getBoundingCircle().y, bird.getBoundingCircle().radius);
-
-        shapeRenderer.rect(pipe1.getBarUp().x, pipe1.getBarUp().y,
-                pipe1.getBarUp().width, pipe1.getBarUp().height);
-        shapeRenderer.rect(pipe2.getBarUp().x, pipe2.getBarUp().y,
-                pipe2.getBarUp().width, pipe2.getBarUp().height);
-        shapeRenderer.rect(pipe3.getBarUp().x, pipe3.getBarUp().y,
-                pipe3.getBarUp().width, pipe3.getBarUp().height);
-
-        shapeRenderer.rect(pipe1.getBarDown().x, pipe1.getBarDown().y,
-                pipe1.getBarDown().width, pipe1.getBarDown().height);
-        shapeRenderer.rect(pipe2.getBarDown().x, pipe2.getBarDown().y,
-                pipe2.getBarDown().width, pipe2.getBarDown().height);
-        shapeRenderer.rect(pipe3.getBarDown().x, pipe3.getBarDown().y,
-                pipe3.getBarDown().width, pipe3.getBarDown().height);
-
-        shapeRenderer.rect(pipe1.getSkullUp().x, pipe1.getSkullUp().y,
-                pipe1.getSkullUp().width, pipe1.getSkullUp().height);
-        shapeRenderer.rect(pipe2.getSkullUp().x, pipe2.getSkullUp().y,
-                pipe2.getSkullUp().width, pipe2.getSkullUp().height);
-        shapeRenderer.rect(pipe3.getSkullUp().x, pipe3.getSkullUp().y,
-                pipe3.getSkullUp().width, pipe3.getSkullUp().height);
-
-        shapeRenderer.rect(pipe1.getSkullDown().x, pipe1.getSkullDown().y,
-                pipe1.getSkullDown().width, pipe1.getSkullDown().height);
-        shapeRenderer.rect(pipe2.getSkullDown().x, pipe2.getSkullDown().y,
-                pipe2.getSkullDown().width, pipe2.getSkullDown().height);
-        shapeRenderer.rect(pipe3.getSkullDown().x, pipe3.getSkullDown().y,
-                pipe3.getSkullDown().width, pipe3.getSkullDown().height);
-
-        shapeRenderer.end();*/
     }
 
     private fun drawGrass() {

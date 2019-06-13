@@ -24,7 +24,7 @@ class GameScreen : Screen {
         world = GameWorld(midPointY)
         renderer = GameRenderer(world, gameHeight.toInt(), midPointY)
 
-        Gdx.input.inputProcessor = InputHandler(world.bird)
+        Gdx.input.inputProcessor = InputHandler(world)
     }
 
     override fun show() {

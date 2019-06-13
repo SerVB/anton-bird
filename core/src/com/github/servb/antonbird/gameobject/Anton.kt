@@ -34,6 +34,11 @@ class Anton(x: Float, y: Float, val width: Int, val height: Int) {
 
         velocity.y = minOf(velocity.y, 200f)
 
+        if (position.y < -13f) {
+            position.y = -13f
+            velocity.y = 0f
+        }
+
         position.add(velocity.cpy().scl(delta))
         boundingCircle.set(position.x + 9, position.y + 6, 6.5f)
 
@@ -57,6 +62,16 @@ class Anton(x: Float, y: Float, val width: Int, val height: Int) {
             AssetLoader.flap.play()
             velocity.y = -140f
         }
+    }
+
+    fun onRestart(y: Float) {
+        rotation = 0f
+        position.y = y
+        velocity.x = 0f
+        velocity.y = 0f
+        acceleration.x = 0f
+        acceleration.y = 460f
+        isAlive = true
     }
 
     fun die() {

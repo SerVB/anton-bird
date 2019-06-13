@@ -33,6 +33,15 @@ class ScrollHandler(private val gameWorld: GameWorld, yPos: Float) {
         }
     }
 
+    fun onRestart() {
+        grass1.onRestart(0f, SCROLL_SPEED)
+        grass2.onRestart(grass1.tailX, SCROLL_SPEED)
+
+        pipe1.onRestart(210f, SCROLL_SPEED)
+        pipe2.onRestart(pipe1.tailX + PIPE_GAP, SCROLL_SPEED)
+        pipe3.onRestart(pipe2.tailX + PIPE_GAP, SCROLL_SPEED)
+    }
+
     fun stop() {
         grass1.stop()
         grass2.stop()

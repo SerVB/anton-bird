@@ -1,6 +1,7 @@
 package com.github.servb.antonbird.helper
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.Texture.TextureFilter
@@ -31,6 +32,17 @@ object AssetLoader {
 
     lateinit var font: BitmapFont
     lateinit var shadow: BitmapFont
+
+    private lateinit var prefs: Preferences
+
+    var highScore: Int
+        get() = prefs.getInteger(HIGH_SCORE)
+        set(value) {
+            prefs.apply {
+                putInteger(HIGH_SCORE, value)
+                flush()
+            }
+        }
 
     fun load() {
         texture = Texture(Gdx.files.internal("data/texture.png")).apply {
@@ -82,6 +94,12 @@ object AssetLoader {
         shadow = BitmapFont(Gdx.files.internal("data/shadow.fnt")).apply {
             data.setScale(0.25f, -0.25f)
         }
+
+        prefs = Gdx.app.getPreferences(PREFERENCE_NAME).also {
+            if (!it.contains(HIGH_SCORE)) {
+                it.putInteger(HIGH_SCORE, 0)
+            }
+        }
     }
 
     fun dispose() {
@@ -95,4 +113,7 @@ object AssetLoader {
         font.dispose()
         shadow.dispose()
     }
+
+    private const val PREFERENCE_NAME = "AntonBird"
+    private const val HIGH_SCORE = "highScore"
 }

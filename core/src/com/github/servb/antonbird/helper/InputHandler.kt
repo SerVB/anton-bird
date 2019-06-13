@@ -1,9 +1,9 @@
 package com.github.servb.antonbird.helper
 
 import com.badlogic.gdx.InputProcessor
-import com.github.servb.antonbird.gameobject.Anton
+import com.github.servb.antonbird.gameworld.GameWorld
 
-class InputHandler(private val myBird: Anton) : InputProcessor {
+class InputHandler(private val world: GameWorld) : InputProcessor {
 
     override fun keyDown(keycode: Int): Boolean {
         return false
@@ -18,7 +18,16 @@ class InputHandler(private val myBird: Anton) : InputProcessor {
     }
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        myBird.onClick()
+        if (world.isReady) {
+            world.start()
+        }
+
+        world.bird.onClick()
+
+        if (world.isGameOver || world.isHighScore) {
+            world.restart()
+        }
+
         return true
     }
 

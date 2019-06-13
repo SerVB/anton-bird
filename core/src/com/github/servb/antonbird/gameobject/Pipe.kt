@@ -22,6 +22,11 @@ class Pipe(x: Float, y: Float, width: Int, height: Int,
         isScored = false
     }
 
+    fun onRestart(x: Float, scrollSpeed: Float) {
+        velocity.x = scrollSpeed
+        reset(x)
+    }
+
     override fun update(delta: Float) {
         super.update(delta)
 
