@@ -41,7 +41,7 @@ class GameRenderer(private val world: GameWorld, private val gameHeight: Int, pr
 
     init {
         cam = OrthographicCamera().apply {
-            setToOrtho(true, 137f, 204f)
+            setToOrtho(true, 136f, 204f)
         }
 
         batcher = SpriteBatch().apply {
@@ -90,7 +90,7 @@ class GameRenderer(private val world: GameWorld, private val gameHeight: Int, pr
 
         batcher.begin()
         batcher.disableBlending()
-        batcher.draw(bg, 0f, (midPointY + 23).toFloat(), 136f, 43f)
+//        batcher.draw(bg, 0f, (midPointY + 23).toFloat(), 136f, 43f)
 
         drawGrass()
 
